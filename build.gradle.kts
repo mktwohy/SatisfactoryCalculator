@@ -2,9 +2,14 @@ import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
 plugins {
-    kotlin("jvm") version "1.5.21"
-    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    val kotlinVersion = "1.6.10"
+    val composeVersion = "1.1.1"
+
+    kotlin("jvm") version kotlinVersion
+    id("org.jetbrains.compose") version composeVersion
+    kotlin("plugin.serialization") version kotlinVersion
 }
 
 group = "me.michael"
@@ -18,9 +23,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-//    implementation("org.jsoup:jsoup:1.14.3")
-//    implementation("org.seleniumhq.selenium:selenium-java:3.141.59")
-    implementation("org.jetbrains.kotlin.plugin.serialization")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 }
 
 tasks.withType<KotlinCompile>() {
