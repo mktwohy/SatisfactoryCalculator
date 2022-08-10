@@ -21,6 +21,9 @@ abstract class Repository<T>(
     fun get(name: String): T? =
         deserializedData[name]
 
+    fun getAll(): Map<String, T> =
+        deserializedData
+
 }
 
 object Buildings : Repository<Building>(
@@ -38,6 +41,6 @@ object Items : Repository<Item>(
     deserializedData = decodeAll("Items.json")
 )
 
-object Recipes : Repository<Recipes>(
+object Recipes : Repository<Recipe>(
     deserializedData = decodeAll("Recipes.json")
 )
