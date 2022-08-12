@@ -1,5 +1,6 @@
 package composables
 
+import AppModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,11 +19,28 @@ val roundedCornerShape = RoundedCornerShape(10.dp)
 
 @Composable
 fun SelectRecipeScreen() {
-    LazyColumn {
-        items(AppModel.recipes) {
-            Recipe(it)
+    Column {
+        Row {
+            MachineSelector(
+                machineType = AppModel.machineType,
+                onMachineSelect = AppModel::selectMachine
+            )
+            RecipeSearcher(
+                text = AppModel.search,
+                onTextChange = {
+                    AppModel.search = it
+                    AppModel.search()
+                }
+            )
+        }
+
+        LazyColumn {
+            items(AppModel.recipes) {
+                Recipe(it)
+            }
         }
     }
+
 }
 
 @Composable

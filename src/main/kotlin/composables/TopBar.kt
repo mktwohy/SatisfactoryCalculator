@@ -25,25 +25,5 @@ fun TopBar() {
                 Text("Production")
             }
         }
-        Column {
-            Button(onClick = { AppModel.dropDownIsExpanded = true }) {
-                Text(AppModel.machineType?.name ?: "Select Machine")
-            }
-            DropdownMenu(
-                expanded = AppModel.dropDownIsExpanded,
-                onDismissRequest = { AppModel.dropDownIsExpanded = false }
-            ) {
-                for (machineType in MachineType.values()) {
-                    Text(
-                        text = machineType.name,
-                        modifier = Modifier.clickable {
-                            AppModel.machineType = machineType
-                            AppModel.updateRecipes()
-                            AppModel.dropDownIsExpanded = false
-                        }
-                    )
-                }
-            }
-        }
     }
 }

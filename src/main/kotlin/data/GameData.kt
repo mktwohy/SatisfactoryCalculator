@@ -3,17 +3,23 @@ package data
 abstract class Repository<T : Identifiable>(
     private val data: Collection<T>
 ) {
+    abstract fun sort(data: List<T>): List<T>
+
     fun get(predicate: (T) -> Boolean): T? =
         data.first(predicate)
 
     fun getAll(predicate: (T) -> Boolean): List<T> =
-        data.filter(predicate)
+        sort(data.filter(predicate))
 
     fun getFromId(id: String): T? =
         get { it.id == id }
 
     fun getFromName(name: String): T? =
         get { it.name == name }
+
+    fun searchByName(search: String): List<T> =
+       getAll { search in it.name }
+
 }
 
 object GameData {
@@ -28,6 +34,16 @@ object GameData {
     }
 
     object Recipes : Repository<Recipe>(idToRecipe) {
+        override fun sort(data: List<Recipe>): List<Recipe> =
+            data
+                .groupBy { it.products.first().item.name }
+                .map { (itemName, recipes) ->
+                    val (alt, normal) = recipes.partition { it.name.contains("alternate", ignoreCase = true) }
+                    normal + alt
+                }
+                .flatten()
+
+
         fun getAllProducedIn(vararg machineType: MachineType): List<Recipe> =
             this.getAll { recipe ->
                 recipe.producedIn.any { it in machineType }
@@ -36,9 +52,22 @@ object GameData {
         fun getByName(name: String): Recipe? =
             get { it.name == name }
 
+        fun search(search: String): List<Recipe> {
+            val searchLowercase = search.lowercase()
+            return getAll { recipe ->
+                search in recipe.name.lowercase() ||
+                        recipe.products.any { p -> search in p.item.name.lowercase() }
+            }
+        }
+
+
     }
 
     object Items : Repository<Item>(idToItem) {
+        override fun sort(data: List<Item>): List<Item> =
+            data.groupBy { it.name }.values.flatten()
+
+
         fun getByName(name: String): Recipe? =
             Recipes.get { it.name == name }
     }

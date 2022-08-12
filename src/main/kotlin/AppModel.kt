@@ -10,18 +10,27 @@ enum class Tab { SELECT_RECIPE, PRODUCTION }
 object AppModel {
     var selectedRecipe: Recipe? by mutableStateOf(null)
     var machineType: MachineType? by mutableStateOf(null)
-    var dropDownIsExpanded by mutableStateOf(false)
     var tab by mutableStateOf(Tab.SELECT_RECIPE)
     var recipes: List<Recipe> by mutableStateOf(listOf())
+    var search by mutableStateOf("")
+
+    fun search() {
+        recipes = GameData.Recipes.search(search)
+    }
 
     fun updateRecipes() {
-        machineType?.let {
-            recipes = GameData.Recipes.getAllProducedIn(it)
-        }
+        recipes = machineType?.let {
+            GameData.Recipes.getAllProducedIn(it)
+        } ?: GameData.Recipes.getAll { true }
     }
 
     fun selectRecipe(id: String) {
         selectedRecipe = GameData.Recipes.getFromId(id)
         tab = Tab.PRODUCTION
+    }
+
+    fun selectMachine(machineType: MachineType) {
+        this.machineType = machineType
+        updateRecipes()
     }
 }

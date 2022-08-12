@@ -18,7 +18,6 @@ import composables.*
 import data.*
 
 
-
 object FicsitColor {
     val Orange = Color(0xFFFA9549)
     val PurpleGray = Color(0xFF5F668C)
@@ -52,15 +51,9 @@ fun main() = singleWindowApplication(
                 .background(color = MaterialTheme.colors.background)
         ) {
             TopBar()
-            Crossfade(AppModel.tab) {
-                when (AppModel.tab) {
-                    Tab.SELECT_RECIPE -> {
-                        SelectRecipeScreen()
-                    }
-                    Tab.PRODUCTION -> {
-                        ProductionScreen()
-                    }
-                }
+            when (AppModel.tab) {
+                Tab.SELECT_RECIPE -> SelectRecipeScreen()
+                Tab.PRODUCTION -> ProductionScreen()
             }
         }
     }
