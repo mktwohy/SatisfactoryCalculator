@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import data.Machine
+import data.MachineType
 
 /* todo when have internet:
 https://github.com/rhocode/Giraffe/tree/master/src/data/images
@@ -26,7 +26,7 @@ val textPadding = 20.dp
 val rowPadding = 10.dp
 
 // region state
-var machine: Machine? by mutableStateOf(Machine.ASSEMBLER)
+var machineType: MachineType? by mutableStateOf(MachineType.ASSEMBLER)
 val input1 = PartIOState("Iron Plates", 20f)
 val input2 = PartIOState("Screws", 30f)
 val input3 = PartIOState("", 40f)
@@ -58,11 +58,11 @@ fun App() {
             .width(1000.dp)
     ) {
         MachineSelector(
-            machine = machine,
-            onMachineSelect = { machine = it }
+            machineType = machineType,
+            onMachineSelect = { machineType = it }
         )
 
-        val numInput = machine?.numInput ?: 0
+        val numInput = machineType?.numInput ?: 0
 
         smallSpacer()
         Text("Input:", color = textColor)

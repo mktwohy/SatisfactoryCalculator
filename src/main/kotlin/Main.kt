@@ -1,12 +1,8 @@
-// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-import ViewModel.recipe
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,10 +17,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
 import composables.*
-import data.Items
-import data.Recipe
-import data.Recipes
-import javax.swing.text.View
+import data.*
 
 
 enum class Tab { SELECT_RECIPE, PRODUCTION }
@@ -37,16 +30,22 @@ object FicsitColor {
 var text by mutableStateOf("")
 
 object ViewModel {
-    var recipe by mutableStateOf<Recipe?>(null)
+    var selectedRecipe: Recipe? by mutableStateOf(null)
+    var machineType: MachineType? by mutableStateOf(null)
+    var dropDownIsExpanded by mutableStateOf(false)
     var tab by mutableStateOf(Tab.SELECT_RECIPE)
+    var recipes: List<Recipe> by mutableStateOf(listOf())
 
-    fun selectRecipe(name: String) {
-        recipe = Recipes.get(name)
-        tab = Tab.PRODUCTION
+    fun updateRecipes() {
+        machineType?.let {
+            recipes = GameData.Recipes.getAllProducedIn(it)
+        }
     }
 
-    fun rate(amount: Float, manufacturingDuration: Float): Float =
-        (60 / manufacturingDuration) * amount
+    fun selectRecipe(id: String) {
+        selectedRecipe = GameData.Recipes.getFromId(id)
+        tab = Tab.PRODUCTION
+    }
 }
 
 
@@ -79,23 +78,37 @@ fun main() = singleWindowApplication(
         ) {
             Column {
                 Row {
-                    Button(onClick = { ViewModel.tab = Tab.SELECT_RECIPE }) {
+                    Button(onClick = { ViewModel.tab = Tab.SELECT_RECIPE; ViewModel.updateRecipes() }) {
                         Text("Select Recipe")
                     }
                     Button(onClick = { ViewModel.tab = Tab.PRODUCTION }) {
                         Text("Production")
                     }
                 }
+                Column {
+                    Button(onClick = { ViewModel.dropDownIsExpanded = true }) {
+                        Text(ViewModel.machineType?.name ?: "Select Machine")
+                    }
+                    DropdownMenu(
+                        expanded = ViewModel.dropDownIsExpanded,
+                        onDismissRequest = { ViewModel.dropDownIsExpanded = false }
+                    ) {
+                        for (machineType in MachineType.values()) {
+                            Text(
+                                text = machineType.name,
+                                modifier = Modifier.clickable {
+                                    ViewModel.machineType = machineType
+                                    ViewModel.updateRecipes()
+                                    ViewModel.dropDownIsExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
                 when (ViewModel.tab) {
                     Tab.SELECT_RECIPE -> {
                         LazyColumn {
-                            items(
-                                Recipes.getAll().filter { (_, recipe) ->
-                                    "building-constructor-mk1" in recipe.producedIn ||
-                                            "building-assembler-mk1" in recipe.producedIn
-                                            "building-manufacturer-mk1" in recipe.producedIn
-                                }.toList()
-                            ) { (name, recipe) ->
+                            items(ViewModel.recipes) { recipe ->
                                 Row(
                                     modifier = Modifier
                                         .width(400.dp)
@@ -105,10 +118,14 @@ fun main() = singleWindowApplication(
                                             color = Color.LightGray,
                                             shape = roundedCornerShape
                                         )
-                                        .clickable { ViewModel.selectRecipe(name) },
+                                        .clickable { ViewModel.selectRecipe(recipe.id) },
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    ItemIcon(item = Items.get(recipe.products.first().item)!!)
+                                    Column {
+                                        for (product in recipe.products) {
+                                            ItemIcon(item = product.item)
+                                        }
+                                    }
                                     Text(
                                         modifier = Modifier.padding(20.dp),
                                         text = recipe.name
@@ -119,7 +136,7 @@ fun main() = singleWindowApplication(
                     }
                     Tab.PRODUCTION -> {
                         Row {
-                            recipe?.let {
+                            ViewModel.selectedRecipe?.let {
                                 Ingredients(modifier = Modifier.padding(5.dp), recipe = it)
                                 Products(modifier = Modifier.padding(5.dp), recipe = it)
                             }

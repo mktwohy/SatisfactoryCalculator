@@ -10,12 +10,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import data.Machine
+import data.MachineType
 
 @Composable
 fun MachineSelector(
-    machine: Machine?,
-    onMachineSelect: (Machine) -> Unit
+    machineType: MachineType?,
+    onMachineSelect: (MachineType) -> Unit
 ) {
     var expanded by mutableStateOf(false)
 
@@ -28,7 +28,7 @@ fun MachineSelector(
                 onClick = { expanded = !expanded }
             ) {
                 Text(
-                    text = machine?.name ?: "Select Machine",
+                    text = machineType?.name ?: "Select Machine",
                     color = MaterialTheme.colors.onBackground
                 )
             }
@@ -37,7 +37,7 @@ fun MachineSelector(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                for (m in Machine.values()) {
+                for (m in MachineType.values()) {
                     Text(
                         modifier = Modifier.clickable {
                             onMachineSelect(m)

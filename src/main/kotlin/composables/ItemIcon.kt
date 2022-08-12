@@ -1,6 +1,5 @@
 package composables
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,12 +15,6 @@ import androidx.compose.ui.unit.dp
 import data.*
 
 val roundedRectangle = RoundedCornerShape(10.dp)
-
-@Preview
-@Composable
-private fun ItemIconPreview() {
-    ItemIcon(item = Items.get("item-modular-frame-heavy")!!)
-}
 
 @Composable
 fun Products(
@@ -53,7 +46,7 @@ fun Ingredients(
 private fun IngredientsOrProducts(
     modifier: Modifier = Modifier,
     title: String,
-    itemIOs: List<Ingredient>,
+    itemIOs: List<RecipeIO>,
     manufacturingDuration: Float,
 ) {
     Column(
@@ -63,7 +56,7 @@ private fun IngredientsOrProducts(
     ) {
         for (itemIO in itemIOs) {
             ItemIO(
-                item = Items.get(itemIO.item)!!,
+                item = itemIO.item,
                 amount = itemIO.amount,
                 rate = (60 / manufacturingDuration) * itemIO.amount
             )
@@ -107,14 +100,13 @@ fun ItemIcon(
     modifier: Modifier = Modifier,
     item: Item,
 ) {
-    println(item)
     Row(
         modifier = modifier.background(
             color = MaterialTheme.colors.surface,
             shape = roundedCornerShape
         )
     ) {
-        if (item.icon != "") {
+        if (item.iconPath != "") {
             Image(
                 painter = painterResource(item.iconPath),
                 contentDescription = item.name
@@ -124,6 +116,4 @@ fun ItemIcon(
         }
 
     }
-
-
 }
