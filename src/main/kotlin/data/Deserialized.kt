@@ -1,11 +1,9 @@
 package data
 
-import androidx.compose.ui.res.painterResource
-import kotlinx.serialization.SerialInfo
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Building(
+data class JsonBuilding(
     val name: String,
     val description: String,
     val baseType: String,
@@ -78,7 +76,7 @@ data class Building(
 }
 
 @Serializable
-data class Connection(
+data class JsonConnection(
     val inputBelts: Int? = null,
     val outputBelts: Int? = null,
     val inputPipes: Int? = null,
@@ -87,7 +85,7 @@ data class Connection(
 )
 
 @Serializable
-data class Item(
+data class JsonItem(
     val name: String,
     val description: String? = null,
     val itemType: String,
@@ -97,22 +95,20 @@ data class Item(
     val radioactiveDecay: Float,
     val form: Int,
     val icon: String
-) {
-    val iconPath = "images/${icon}.256.png"
-}
+)
 
 @Serializable
-data class Recipe(
+data class JsonRecipe(
     val name: String,
-    val ingredients: List<Ingredient>,
-    val products: List<Ingredient>,
+    val ingredients: List<JsonRecipeIO>,
+    val products: List<JsonRecipeIO>,
     val producedIn: List<String>,
     val manualMultiplier: Float,
     val manufacturingDuration: Float
 )
 
 @Serializable
-data class Ingredient(
+data class JsonRecipeIO(
     val item: String,
     val amount: Int
 )
