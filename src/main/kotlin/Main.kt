@@ -1,21 +1,14 @@
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
 import composables.*
-import data.*
 
 
 object FicsitColor {
@@ -50,10 +43,14 @@ fun main() = singleWindowApplication(
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.background)
         ) {
-            TopBar()
+            TabRow(
+                modifier = Modifier.fillMaxWidth(),
+                selectedTab = AppModel.tab,
+                onSelectedTabChange = { AppModel.tab = it }
+            )
             when (AppModel.tab) {
-                Tab.SELECT_RECIPE -> SelectRecipeScreen()
-                Tab.PRODUCTION -> ProductionScreen()
+                ScreenTab.SELECT_RECIPE -> SelectRecipeScreen()
+                ScreenTab.PRODUCTION -> ProductionScreen()
             }
         }
     }
