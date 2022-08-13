@@ -4,47 +4,43 @@ import androidx.compose.material.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.window.singleWindowApplication
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 import composables.*
 
+
 @OptIn(ExperimentalComposeUiApi::class)
-fun main() = singleWindowApplication(
-    onKeyEvent = {
-        if (it.isCtrlPressed && it.key == Key.R) {
-
-        }
-        if (it.key == Key.Enter) {
-
-        }
-        true
-    }
-) {
-    MaterialTheme(
-        colors = darkColors(
-            primary = FicsitColor.Orange,
-            onSecondary = Color.LightGray,
-            onBackground = Color.LightGray,
-            surface = Color.Gray,
-            onSurface = Color.LightGray,
-            background = Color.Black
-        )
+fun main() = application {
+    Window(
+        onCloseRequest = this::exitApplication,
+        icon = painterResource(AppIcon.PIONEER_THUMBS_UP),
+        title = "Satisfactory Calculator"
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colors.background)
-        ) {
-            TabRow(
-                modifier = Modifier.fillMaxWidth(),
-                selectedTab = Model.tab,
-                onSelectedTabChange = { Model.tab = it }
+        MaterialTheme(
+            colors = darkColors(
+                primary = FicsitColor.Orange,
+                onSecondary = Color.LightGray,
+                onBackground = Color.LightGray,
+                surface = Color.Gray,
+                onSurface = Color.LightGray,
+                background = Color.Black
             )
-            when (Model.tab) {
-                ScreenTab.SELECT_RECIPE -> SelectRecipeScreen()
-                ScreenTab.PRODUCTION -> ProductionScreen()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colors.background)
+            ) {
+                TabRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    selectedTab = Model.tab,
+                    onSelectedTabChange = { Model.tab = it }
+                )
+                when (Model.tab) {
+                    ScreenTab.SELECT_RECIPE -> SelectRecipeScreen()
+                    ScreenTab.PRODUCTION -> ProductionScreen()
+                }
             }
         }
     }

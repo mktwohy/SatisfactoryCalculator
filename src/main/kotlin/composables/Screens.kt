@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun SelectRecipeScreen() {
         }
     }
 
-    LazyColumn(state = Model.recipeListState) {
+    LazyColumn(modifier = Modifier.wrapContentWidth(), state = Model.recipeListState) {
         items(Model.recipes.chunked(4)) { row ->
             Row {
                 for (recipe in row) {
@@ -51,11 +52,10 @@ fun SelectRecipeScreen() {
                     )
                 }
             }
+            Divider()
         }
     }
 }
-
-
 
 @Composable
 fun ProductionScreen() {

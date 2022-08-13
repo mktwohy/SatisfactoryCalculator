@@ -12,3 +12,9 @@ object FicsitColor {
     val PurpleGray = Color(0xFF5F668C)
     val TextColor = Color.White
 }
+
+object AppIcon {
+    const val PIONEER_HEART = "pioneer_heart.png"
+    const val PIONEER_THUMBS_UP = "pioneer_thumbs_up.png"
+    const val SATISFACTORY_LOGO = "S_logo.jpg"
+}
