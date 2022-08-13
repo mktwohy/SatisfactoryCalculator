@@ -1,6 +1,5 @@
 package composables
 
-import TOP_BAR_HEIGHT
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import extensions.formatFromEnum
 
 enum class ScreenTab { SELECT_RECIPE, PRODUCTION }
@@ -24,7 +25,7 @@ fun TabRow(
         modifier
             .background(color = Color.DarkGray)
             .fillMaxWidth()
-            .height(TOP_BAR_HEIGHT)
+            .height(Dimension.TopBarHeight)
     ) {
         Row(
             modifier = Modifier
@@ -67,7 +68,11 @@ private fun Tab(
     ) {
         Text(
             modifier = Modifier.padding(start = 20.dp),
-            text = tab.name.formatFromEnum()
+            text = tab.name.formatFromEnum(),
+            style = TextStyle(
+                color = FicsitColor.TextColor,
+                fontSize = 18.sp
+            )
         )
     }
 }

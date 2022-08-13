@@ -12,6 +12,11 @@ object AppModel {
     var tab by mutableStateOf(ScreenTab.SELECT_RECIPE)
     var recipes: List<Recipe> by mutableStateOf(listOf())
     var search by mutableStateOf("")
+    var expanded by mutableStateOf(false)
+
+    init {
+        updateRecipes()
+    }
 
     fun search() {
         recipes = GameData.Recipes.search(search)

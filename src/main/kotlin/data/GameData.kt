@@ -53,10 +53,9 @@ object GameData {
             get { it.name == name }
 
         fun search(search: String): List<Recipe> {
-            val searchLowercase = search.lowercase()
             return getAll { recipe ->
-                search in recipe.name.lowercase() ||
-                        recipe.products.any { p -> search in p.item.name.lowercase() }
+                recipe.name.contains(search, ignoreCase = true) ||
+                        recipe.products.any {it.item.name.contains(search, ignoreCase = true) }
             }
         }
 

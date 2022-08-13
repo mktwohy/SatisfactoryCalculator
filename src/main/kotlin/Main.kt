@@ -10,12 +10,6 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.window.singleWindowApplication
 import composables.*
 
-
-object FicsitColor {
-    val Orange = Color(0xFFFA9549)
-    val PurpleGray = Color(0xFF5F668C)
-}
-
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() = singleWindowApplication(
     onKeyEvent = {

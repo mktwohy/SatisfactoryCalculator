@@ -1,5 +1,7 @@
 package data
 
+import extensions.formatFromEnum
+
 enum class MachineType(val numInput: Int, val numOutput: Int, val jsonName: String) {
     BUILD_GUN(0, 0, "building-build-gun"),
     EQUIPMENT_WORKSHOP(0,0, "building-workshop-component"),
@@ -21,6 +23,9 @@ enum class MachineType(val numInput: Int, val numOutput: Int, val jsonName: Stri
 
         fun fromJsonName(jsonName: String): MachineType? =
             jsonNameMapping[jsonName]
+
+        val MachineType?.formattedName: String get() =
+            this?.name?.formatFromEnum() ?: "Any Machine"
     }
 }
 

@@ -23,9 +23,11 @@ fun SelectRecipeScreen() {
         Row {
             MachineSelector(
                 machineType = AppModel.machineType,
-                onMachineSelect = AppModel::selectMachine
+                onMachineSelect = AppModel::selectMachine,
+                expanded = AppModel.expanded,
+                onExpandedChange = { AppModel.expanded = !AppModel.expanded }
             )
-            RecipeSearcher(
+            SearchBar(
                 text = AppModel.search,
                 onTextChange = {
                     AppModel.search = it
