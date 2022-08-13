@@ -37,39 +37,23 @@ fun SelectRecipeScreen() {
         }
 
         LazyColumn {
-            items(AppModel.recipes) {
-                Recipe(it)
+            items(AppModel.recipes.chunked(4)) { row ->
+                Row {
+                    for (recipe in row) {
+                        RecipeThumbnail(
+                            modifier = Modifier.width(150.dp).height(200.dp),
+                            recipe = recipe,
+                            onClick = AppModel::selectRecipe
+                        )
+                    }
+                }
             }
         }
     }
 
 }
 
-@Composable
-fun Recipe(recipe: Recipe) {
-    Row(
-        modifier = Modifier
-            .width(400.dp)
-            .height(100.dp)
-            .padding(horizontal = 5.dp, vertical = 2.5.dp)
-            .background(
-                color = Color.LightGray,
-                shape = roundedCornerShape
-            )
-            .clickable { AppModel.selectRecipe(recipe.id) },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column {
-            for (product in recipe.products) {
-                ItemIcon(item = product.item)
-            }
-        }
-        Text(
-            modifier = Modifier.padding(20.dp),
-            text = recipe.name
-        )
-    }
-}
+
 
 @Composable
 fun ProductionScreen() {

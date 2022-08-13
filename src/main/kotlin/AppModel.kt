@@ -28,8 +28,8 @@ object AppModel {
         } ?: GameData.Recipes.getAll { true }
     }
 
-    fun selectRecipe(id: String) {
-        selectedRecipe = GameData.Recipes.getFromId(id)
+    fun selectRecipe(recipe: Recipe) {
+        selectedRecipe = recipe
         tab = ScreenTab.PRODUCTION
     }
 

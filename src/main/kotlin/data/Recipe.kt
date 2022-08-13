@@ -8,6 +8,7 @@ interface Identifiable {
 data class Recipe(
     override val id: String,
     override val name: String,
+    val isAlternate: Boolean,
     val ingredients: List<RecipeIO>,
     val products: List<RecipeIO>,
     val producedIn: List<MachineType>,
@@ -32,4 +33,6 @@ data class Item(
     val radioactiveDecay: Float,
     val form: Int,
     val iconPath: String
-) : Identifiable
+) : Identifiable {
+    val iconPathIsValid = iconPath != "images/.256.png"
+}

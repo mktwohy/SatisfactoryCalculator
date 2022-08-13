@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import data.*
 
@@ -82,7 +83,7 @@ fun ItemIO(
             .background(color = Color.Transparent)
     ) {
         Row(modifier = Modifier.padding(10.dp)) {
-            ItemIcon(item = item)
+            ItemImage(item = item)
 
             Column(
                 modifier = Modifier.fillMaxHeight().padding(15.dp),
@@ -96,24 +97,43 @@ fun ItemIO(
 }
 
 @Composable
-fun ItemIcon(
+fun ItemImages(
+    modifier: Modifier = Modifier,
+    items: Collection<Item>,
+    maxItemSize: Dp = 100.dp
+) {
+    val itemWidth = maxItemSize / items.size
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        for (item in items) {
+            ItemImage(
+                modifier = Modifier.size(itemWidth),
+                item = item
+            )
+        }
+    }
+
+
+}
+
+@Composable
+fun ItemImage(
     modifier: Modifier = Modifier,
     item: Item,
 ) {
-    Row(
-        modifier = modifier.background(
-            color = MaterialTheme.colors.surface,
-            shape = roundedCornerShape
+    if (item.iconPathIsValid) {
+        Image(
+            modifier = modifier,
+            painter = painterResource(item.iconPath),
+            contentDescription = item.name
         )
-    ) {
-        if (item.iconPath != "") {
-            Image(
-                painter = painterResource(item.iconPath),
-                contentDescription = item.name
-            )
-        } else {
-            Text("No image found for ${item.name}!")
-        }
-
+    } else {
+        Text(
+            modifier = modifier,
+            text = "Image Not Found"
+        )
     }
 }

@@ -37,9 +37,9 @@ object GameData {
         override fun sort(data: List<Recipe>): List<Recipe> =
             data
                 .groupBy { it.products.first().item.name }
-                .map { (itemName, recipes) ->
-                    val (alt, normal) = recipes.partition { it.name.contains("alternate", ignoreCase = true) }
-                    normal + alt
+                .map { (_, recipes) ->
+                    val (altRecipes, normalRecipes) = recipes.partition { it.isAlternate }
+                    normalRecipes + altRecipes
                 }
                 .flatten()
 
@@ -58,8 +58,6 @@ object GameData {
                         recipe.products.any {it.item.name.contains(search, ignoreCase = true) }
             }
         }
-
-
     }
 
     object Items : Repository<Item>(idToItem) {
@@ -78,7 +76,8 @@ object GameData {
     ): Recipe =
         Recipe(
             id = id,
-            name = jsonRecipe.name,
+            name = jsonRecipe.name.removePrefix("Alternate: "),
+            isAlternate = jsonRecipe.name.contains("Alternate", ignoreCase = true),
             ingredients = jsonRecipe.ingredients.map { jsonIngredient ->
                 recipeIOFromJson(
                     jsonRecipeIO = jsonIngredient,
