@@ -9,7 +9,7 @@ import data.Recipe
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-object AppModel {
+object Model {
     var selectedRecipe: Recipe? by mutableStateOf(null)
     var machineType: MachineType? by mutableStateOf(null)
     var tab by mutableStateOf(ScreenTab.SELECT_RECIPE)

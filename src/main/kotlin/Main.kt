@@ -39,10 +39,10 @@ fun main() = singleWindowApplication(
         ) {
             TabRow(
                 modifier = Modifier.fillMaxWidth(),
-                selectedTab = AppModel.tab,
-                onSelectedTabChange = { AppModel.tab = it }
+                selectedTab = Model.tab,
+                onSelectedTabChange = { Model.tab = it }
             )
-            when (AppModel.tab) {
+            when (Model.tab) {
                 ScreenTab.SELECT_RECIPE -> SelectRecipeScreen()
                 ScreenTab.PRODUCTION -> ProductionScreen()
             }
