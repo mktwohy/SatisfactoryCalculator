@@ -8,7 +8,7 @@ abstract class Repository<T : Identifiable>(
     fun get(predicate: (T) -> Boolean): T? =
         data.first(predicate)
 
-    fun getAll(predicate: (T) -> Boolean): List<T> =
+    fun getAll(predicate: (T) -> Boolean = { true }): List<T> =
         sort(data.filter(predicate))
 
     fun getFromId(id: String): T? =
@@ -52,10 +52,16 @@ object GameData {
         fun getByName(name: String): Recipe? =
             get { it.name == name }
 
-        fun search(search: String): List<Recipe> {
-            return getAll { recipe ->
-                recipe.name.contains(search, ignoreCase = true) ||
-                        recipe.products.any {it.item.name.contains(search, ignoreCase = true) }
+        fun search(search: String, machineType: MachineType? = null): List<Recipe> {
+            val recipes = if (machineType == null) getAll() else getAllProducedIn(machineType)
+
+            return recipes.filter { recipe ->
+                buildList {
+                    add(recipe.name)
+                    addAll(recipe.products.map { it.item.name })
+                }.any {
+                    it.contains(search, ignoreCase = true)
+                }
             }
         }
     }

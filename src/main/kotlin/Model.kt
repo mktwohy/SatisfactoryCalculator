@@ -23,7 +23,7 @@ object Model {
     }
 
     fun search() {
-        recipes = GameData.Recipes.search(search)
+        recipes = GameData.Recipes.search(search, machineType)
     }
 
     fun updateRecipes() {
