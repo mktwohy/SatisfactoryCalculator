@@ -13,19 +13,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import data.MachineType
+import extensions.formatFromEnum
 
 @Composable
 fun MachineSelector(
     machineType: MachineType?,
-    onMachineSelect: (MachineType) -> Unit
+    onMachineSelect: (MachineType?) -> Unit
 ) {
+    fun formatMachineType(machineType: MachineType?): String =
+        machineType?.name?.formatFromEnum() ?: "Any"
+
     var expanded by mutableStateOf(false)
 
-    RoundedBackground(modifier = Modifier.clickable { expanded = !expanded }) {
+    Button(onClick = { expanded = !expanded }) {
         Row {
             Text(
                 modifier = Modifier.padding(10.dp),
-                text = machineType?.name ?: "Select Machine",
+                text = formatMachineType(machineType),
                 color = MaterialTheme.colors.onBackground
             )
             DropdownMenu(
@@ -33,13 +37,20 @@ fun MachineSelector(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
+                Text(
+                    modifier = Modifier.clickable {
+                        onMachineSelect(null)
+                        expanded = false
+                    },
+                    text = "Any",
+                )
                 for (m in MachineType.values()) {
                     Text(
                         modifier = Modifier.clickable {
                             onMachineSelect(m)
                             expanded = false
                         },
-                        text = m.name,
+                        text = formatMachineType(m),
                     )
                 }
             }

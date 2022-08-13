@@ -29,7 +29,7 @@ object AppModel {
         tab = Tab.PRODUCTION
     }
 
-    fun selectMachine(machineType: MachineType) {
+    fun selectMachine(machineType: MachineType?) {
         this.machineType = machineType
         updateRecipes()
     }
